@@ -1,0 +1,130 @@
+### 1. Problem Framing & Business Questions
+
+**Start with a clear problem statement:**
+
+Example: *"Which products are frequently purchased together, and how can we use these patterns to create product bundles and cross-sell recommendations that increase average order value?"*
+
+**Sub-questions to answer:**
+
+1. **Size:** What is the average basket size (items per order)?
+2. **Rank:** Which product pairs have the most repeated purchased rates?
+3. **Explain:** What drives customers to buy specific products together?
+4. **Compare:** How do purchase patterns vary by country or time period?
+5. **Recommend:** Which 5 product bundles should we create to maximize Average Order Value (AOV)?
+
+### 2. Data Requirements & Gathering
+
+**KPIs you need:**
+
+- Basket Size (items per invoice → Cart Size)
+- Product Pair Repeated Purchase Rate
+- Lift (How much more likely two products are bought together than by chance)
+    - *For example, a lift of 1.25 means buying bread increases the likelihood of buying butter by 25% compared to simply buying butter at random. If lift is 1, the items are independent; less than 1 means buying one discourages buying the other*
+- Support (What percent of all orders include these items)
+    - *“For example, if 20% of all orders contain both bread and butter, the support for the “bread & butter” pair is 20%”*
+- Confidence (How likely someone is to buy item B when they buy item A)
+    - *For example, if 75% of customers who buy bread also buy butter, the confidence for the rule “bread → butter” is 75%*
+- Cross-sell Conversion Rate
+
+**Field mapping from UCI Online Retail Dataset:**
+
+**Transaction Identifiers:**
+
+- InvoiceNo → Invoice number (6-digit string; if starts with 'c' = cancellation/refund)
+- StockCode → Product code (5-digit string; unique identifier per product)
+- Description → Product name (text)
+
+**Transaction Details:**
+
+- Quantity → Quantity purchased (integer; negative values = returns)
+- UnitPrice → Price per unit (make it US dollars (decimal))
+- InvoiceDate → Transaction timestamp (format: MM/DD/YYYY HH:MM)
+
+**Customer & Location:**
+
+- CustomerID → Customer identifier (5-digit integer)
+- Country → Customer's country (text)
+
+**Calculated Metrics:**
+
+- **Line Total** = Quantity * UnitPrice
+- **Basket Size** = COUNT(DISTINCT StockCode) GROUP BY InvoiceNo
+- **Support(A)** = Orders containing Product A / Total Orders
+- **Support(A,B)** = Orders containing both A and B / Total Orders
+- **Confidence(A→B)** = Support(A,B) / Support(A)
+- **Lift(A,B)** = Support(A,B) / (Support(A) * Support(B))
+    - Lift > 1 = Items bought together more than expected
+    - Lift = 1 = No association
+    - Lift < 1 = Negative association
+
+*Note: The dataset contains 541,909 transactions from December 2010 to September 2011. Exclude cancellations (InvoiceNo starting with 'c'), returns (Quantity > 0), and test records (StockCodes like 'POST', 'D', 'M', 'BANK CHARGES').*
+
+**Tools setup:**
+
+- Download Online Retail.xlsx from UCI ML Repository and convert to CSV
+- Import into BigQuery, PostgreSQL, or SQLite
+- Use Tableau/Power BI for visualizing product pairs
+
+### 3. Data Analysis
+
+Follow the 5-stage approach:
+
+**A. Exploring Data**
+
+- Total invoices, unique products, unique customers
+- Date range validation
+- Check for nulls in CustomerID
+- Identify cancellations (InvoiceNo starting with 'c')
+
+**B. Profiling Data**
+
+- Basket size distribution
+- Most frequently purchased products
+- Revenue distribution by product
+- Order frequency by day of week, hour
+
+**C. Cleaning Data**
+
+- Remove cancellations
+- Remove returns
+- Remove non-product codes
+- Standardize product descriptions
+
+**D. Shaping Data**
+
+- Create order-product matrix
+- Calculate product pair co-occurrences by joining orders on InvoiceNo
+    - *For example, if an order contains products A, B, and C, joining on InvoiceNo generates pairs (A, B), (A, C), and (B, C) for that transaction.*
+- Calculate Support, Confidence, Lift for top pairs
+
+**E. Analyzing Data**
+
+- Identify top 10 product pairs by Lift
+- Find products with highest cross-sell potential
+- Segment baskets: small (1-2 items), medium (3-5), large (6+)
+- Compare patterns between countries
+
+### 4. Presentation
+
+**Dashboards to build (Tableau/Power BI):**
+
+- Top Product Pairs
+- Product Network Graph
+- Basket Size Distribution
+- Cross-sell Heatmap
+- Recommended Bundles
+
+**Key insights to highlight (Example):**
+
+- Product X and Product Y are purchased together 8x more than expected (Lift = 8.2)
+- Customers buying Item A have a 45% chance of also buying Item B
+- Baskets with 4+ items have 2.3x higher AOV than single-item orders
+- Top 5 product pairs represent 15% of all multi-item orders
+
+**Recommendations (Example):**
+
+- Create product bundles for top 5 pairs with Lift > 3 and offer 10% discount
+- Add 'Frequently Bought Together' section on product pages showing top 3 best combinations
+- Trigger cross-sell emails when customer buys Product A, recommend Product B within 48 hours
+- Optimize homepage layout to place products with higher Lift near each other
+- A/B test bundle pricing to find optimal discount that maximizes revenue
