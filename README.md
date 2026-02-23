@@ -430,7 +430,6 @@ cd market-basket-analysis
 **Your Name**
 -  Email: yogeshky241@gmail.com
 -  LinkedIn: https://www.linkedin.com/in/yogeshk24/
--  GitHub: [
 
 ---
 
