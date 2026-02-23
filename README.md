@@ -327,11 +327,11 @@ Top 10 Bundle AOV =
 ## Dashboard Screenshots
 
 ### Executive Summary
-![Executive Summary](Screenshots/Executive Summary.png)
+![Executive Summary](https://github.com/yogesh-ky/Market-Basket-Analysis---Data-Analysis-Project/blob/d598a3a3504aadd87125479bac63a15bd356b10c/Screenshots/Executive%20Summary.png)
 *Overview of business metrics, revenue trends, and basket distribution*
 
 ### Product Pair Analysis
-![Product Pair Analysis](Screenshots/Cross Sell Product recommendations.png)
+!([Screenshots/Cross Sell Product recommendations.png](https://github.com/yogesh-ky/Market-Basket-Analysis---Data-Analysis-Project/blob/456aeb9c4fc0a68fd0ca23afef846d26aa8223d7/Screenshots/Cross%20Sell%20Product%20recommendations.png))
 *Detailed cross-sell opportunities with Lift scores and revenue potential*
 
 ---
