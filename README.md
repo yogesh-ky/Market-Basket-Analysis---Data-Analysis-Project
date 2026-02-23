@@ -327,11 +327,11 @@ Top 10 Bundle AOV =
 ## Dashboard Screenshots
 
 ### Executive Summary
-![Executive Summary](screenshots/executive_summary.png)
+![Executive Summary](Screenshots/Executive Summary.png)
 *Overview of business metrics, revenue trends, and basket distribution*
 
 ### Product Pair Analysis
-![Product Pair Analysis](screenshots/product_pair_analysis.png)
+![Product Pair Analysis](Screenshots/Cross Sell Product recommendations.png)
 *Detailed cross-sell opportunities with Lift scores and revenue potential*
 
 ---
